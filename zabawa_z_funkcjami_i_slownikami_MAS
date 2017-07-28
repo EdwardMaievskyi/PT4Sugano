@@ -1,0 +1,34 @@
+# -*- coding: utf-8 -*-
+import numpy as np
+import matplotlib.pyplot as plt
+
+print("Hello, im first PhysioCode")
+
+Param = {"k_e":0.0888,"k_a1":7.6226,"frac":0.5147,"X0":1.0,"V_val":1.0,"T_lag":10,"k_a2":1.0588}
+
+
+#k_e=0.0888
+#k_a1=7.6226
+#frac = 0.5147
+#X0 = 1.0
+#V_val = 1.0
+#T_lag = 2.2862
+#T_lag = 10
+#k_a2 = 1.0588
+
+#time_exp=np.arange(24)
+time_exp= np.array([0.06, 0.125, 0.25, 0.42, 0.6, 0.75, 0.95, 1.125, 1.45, 2, 3, 4, 5, 6, 7, 12, 24])
+con_exp2= np.array([25, 36, 42, 48, 46.2, 47, 46, 44.5, 45, 42, 63, 70, 72, 65, 55, 39, 14])
+const_theor1 = (Param['k_a1'] * Param['frac'] * Param['X0'] )/(Param['V_val'] * (Param['k_a1'] - Param['k_e']))
+con_theor1 = const_theor1 * (np.exp(-Param['k_e']*time_exp) - np.exp(-Param['k_a1']*time_exp))
+const_theor2 = (Param['k_a2'] * (1-Param['frac']) * Param['X0'])/(Param['V_val'] * (Param['k_a2'] - Param['k_e']))
+con_theor2 = con_theor1 + (time_exp>Param['T_lag'])* (const_theor2 * (np.exp(-Param['k_e']*(time_exp - Param['T_lag'])) - np.exp(-Param['k_a2']*(time_exp - Param['T_lag']))))
+print('xxx ',time_exp, Param['T_lag'])
+
+
+plt.plot(time_exp, con_theor1)
+plt.plot(time_exp, con_theor2,'-o')
+# plt.show()
+
+print(con_theor1)
+print(con_theor2)
